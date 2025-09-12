@@ -2,6 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Medical theme colors */
+  --primary: 210 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 95%;
+  --secondary-foreground: 210 40% 20%;
+  --muted: 210 20% 96%;
+  --muted-foreground: 210 20% 45%;
+  --accent: 210 60% 90%;
+  --accent-foreground: 210 60% 15%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 210 20% 88%;
+  --input: 210 20% 88%;
+  --ring: 210 100% 50%;
+  --background: 0 0% 100%;
+  --foreground: 210 40% 8%;
+  --card: 0 0% 100%;
+  --card-foreground: 210 40% 8%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 40% 8%;
+  --success: 120 60% 50%;
+  --warning: 45 90% 60%;
+  --medical-blue: 210 100% 50%;
+  --medical-light: 210 40% 95%;
+  --medical-dark: 210 100% 30%;
+}
+
+.dark {
+  --primary: 210 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 10%;
+  --secondary-foreground: 210 40% 90%;
+  --muted: 210 20% 5%;
+  --muted-foreground: 210 20% 65%;
+  --accent: 210 60% 15%;
+  --accent-foreground: 210 60% 90%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 210 20% 20%;
+  --input: 210 20% 20%;
+  --ring: 210 100% 50%;
+  --background: 210 40% 2%;
+  --foreground: 210 40% 98%;
+  --card: 210 40% 5%;
+  --card-foreground: 210 40% 98%;
+  --popover: 210 40% 5%;
+  --popover-foreground: 210 40% 98%;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
