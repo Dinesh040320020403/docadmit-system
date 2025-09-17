@@ -19,6 +19,10 @@ import DoctorDashboardNew from "./pages/doctors/DoctorDashboardNew";
 import DoctorsList from "./pages/doctors/DoctorsList";
 import PatientDashboardNew from "./pages/patients/PatientDashboardNew";
 import PatientsList from "./pages/patients/PatientsList";
+import HospitalAdminLogin from "./pages/hospital/HospitalAdminLogin";
+import HospitalDoctorLogin from "./pages/hospital/HospitalDoctorLogin";
+import HospitalAdminDashboard from "./pages/hospital/HospitalAdminDashboard";
+import HospitalDoctorDashboard from "./pages/hospital/HospitalDoctorDashboard";
 import NotFound from "./pages/NotFound";
 import Emergency from "./pages/Emergency";
 
@@ -59,6 +63,10 @@ const App = () => (
           <Route path="/doctors/dashboard" element={<DoctorDashboardNew />} />
           <Route path="/patients" element={<PatientsList />} />
           <Route path="/patients/dashboard" element={<PatientDashboardNew />} />
+          <Route path="/hospital/admin" element={<HospitalAdminLogin />} />
+          <Route path="/hospital/doctor" element={<HospitalDoctorLogin />} />
+          <Route path="/hospital/admin/dashboard" element={<HospitalAdminDashboard />} />
+          <Route path="/hospital/doctor/dashboard" element={<HospitalDoctorDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
