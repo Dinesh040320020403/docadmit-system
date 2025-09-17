@@ -33,9 +33,24 @@ class Doctor(models.Model):
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     is_available = models.BooleanField(default=True)
     consultation_fee = models.DecimalField(max_digits=10, decimal_places=2, default=100.00)
+    available_from = models.TimeField(null=True, blank=True)
+    available_to = models.TimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name}"
+
+class DoctorRating(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='ratings')
+    patient = models.ForeignKey('Patient', on_delete=models.SET_NULL, null=True, blank=True)
+    rating = models.PositiveSmallIntegerField(default=5)
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Rating {self.rating} for {self.doctor}"
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -17,11 +17,21 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     department_name = serializers.CharField(source='department.name', read_only=True)
+    rating_avg = serializers.FloatField(source='ratings__avg', read_only=True)
+    rating_count = serializers.IntegerField(source='ratings__count', read_only=True)
     
     class Meta:
         model = Doctor
-        fields = ['id', 'user', 'specialization', 'license_number', 'experience_years', 
-                 'department', 'department_name', 'is_available', 'consultation_fee']
+        fields = ['id', 'user', 'specialization', 'license_number', 'experience_years',
+                 'department', 'department_name', 'is_available', 'consultation_fee',
+                 'available_from', 'available_to', 'rating_avg', 'rating_count']
+
+class DoctorRatingSerializer(serializers.ModelSerializer):
+    patient_name = serializers.CharField(source='patient.user.get_full_name', read_only=True)
+
+    class Meta:
+        model = DoctorRating
+        fields = ['id', 'rating', 'comment', 'patient_name', 'created_at']
 
 class PatientSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)

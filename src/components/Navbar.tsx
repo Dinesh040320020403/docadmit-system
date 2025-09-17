@@ -1,10 +1,42 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Stethoscope } from "lucide-react";
+import { Menu, X, Stethoscope, LogOut, User, Heart } from "lucide-react";
+import { isAdmin, shouldShowAdminLinks } from "@/utils/accessControl";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const storedUserType = localStorage.getItem('userType');
+    const storedUserEmail = localStorage.getItem('userEmail');
+    
+    if (storedUserType && storedUserEmail) {
+      setIsLoggedIn(true);
+      setUserType(storedUserType);
+      setUserEmail(storedUserEmail);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // Clear user session
+    localStorage.removeItem('userType');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('token');
+    
+    // Reset state
+    setIsLoggedIn(false);
+    setUserType(null);
+    setUserEmail(null);
+    
+    // Navigate to home page
+    navigate('/');
+  };
 
   return (
     <nav className="bg-background border-b border-border sticky top-0 z-50">
@@ -12,8 +44,10 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <Stethoscope className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">HealthCare+</span>
+              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-orange-500 rounded-lg flex items-center justify-center">
+                <Heart className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-foreground">Priyan Medical Agency</span>
             </Link>
           </div>
 
@@ -22,24 +56,49 @@ const Navbar = () => {
             <Link to="/" className="text-foreground hover:text-primary transition-colors">
               Home
             </Link>
-            <Link to="/admin" className="text-foreground hover:text-primary transition-colors">
-              Admin
-            </Link>
-            <Link to="/patients" className="text-foreground hover:text-primary transition-colors">
-              Patients
-            </Link>
-            <Link to="/doctors" className="text-foreground hover:text-primary transition-colors">
-              Doctors
-            </Link>
-            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
-              Contact
-            </Link>
-            <Button 
-              asChild 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-2 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105"
-            >
-              <Link to="/book-appointment">Book Appointment</Link>
-            </Button>
+            {!isLoggedIn ? (
+              <>
+                <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
+                  Contact
+                </Link>
+                <Link to="/emergency" className="text-foreground hover:text-primary transition-colors">
+                  Emergencyz
+                </Link>
+                <Button 
+                  asChild 
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-2 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105"
+                >
+                  <Link to="/book-appointment">Book Appointment</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                  <User className="h-4 w-4" />
+                  <span>{userEmail} ({userType})</span>
+                </div>
+                {/* Only show admin dashboard link for admin users */}
+                {isAdmin(userType as any) && (
+                  <Link to="/admin/dashboard" className="text-foreground hover:text-primary transition-colors">
+                    Admin Dashboard
+                  </Link>
+                )}
+                {/* Show regular dashboard for non-admin users */}
+                {!isAdmin(userType as any) && (
+                  <Link to={`/${userType}/dashboard`} className="text-foreground hover:text-primary transition-colors">
+                    Dashboard
+                  </Link>
+                )}
+                <Button 
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="flex items-center space-x-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -66,44 +125,76 @@ const Navbar = () => {
               >
                 Home
               </Link>
-              <Link
-                to="/admin"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                Admin
-              </Link>
-              <Link
-                to="/patients"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                Patients
-              </Link>
-              <Link
-                to="/doctors"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                Doctors
-              </Link>
-              <Link
-                to="/contact"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </Link>
-              <div className="px-3 py-2">
-                <Button 
-                  asChild 
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                >
-                  <Link to="/book-appointment" onClick={() => setIsOpen(false)}>
-                    Book Appointment
+              {!isLoggedIn ? (
+                <>
+                  <Link
+                    to="/contact"
+                    className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Contact
                   </Link>
-                </Button>
-              </div>
+                  <Link
+                    to="/emergency"
+                    className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Emergency
+                  </Link>
+                  <div className="px-3 py-2">
+                    <Button 
+                      asChild 
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                    >
+                      <Link to="/book-appointment" onClick={() => setIsOpen(false)}>
+                        Book Appointment
+                      </Link>
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="px-3 py-2 text-sm text-muted-foreground">
+                    <div className="flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span>{userEmail} ({userType})</span>
+                    </div>
+                  </div>
+                  {/* Only show admin dashboard link for admin users */}
+                  {isAdmin(userType as any) && (
+                    <Link
+                      to="/admin/dashboard"
+                      className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  {/* Show regular dashboard for non-admin users */}
+                  {!isAdmin(userType as any) && (
+                    <Link
+                      to={`/${userType}/dashboard`}
+                      className="block px-3 py-2 text-foreground hover:text-primary transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+                  <div className="px-3 py-2">
+                    <Button 
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      variant="outline"
+                      className="w-full flex items-center justify-center space-x-2"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Logout</span>
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

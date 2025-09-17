@@ -3,6 +3,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -234,6 +235,44 @@ def create_bill(request):
             'total_amount': float(bill.total_amount)
         })
     
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+# Doctor Views
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_doctors(request):
+    try:
+        doctors = Doctor.objects.select_related('user', 'department').prefetch_related('ratings')
+
+        # Filter by query (name or specialization)
+        q = request.GET.get('q', '')
+        if q:
+            doctors = doctors.filter(
+                Q(user__first_name__icontains=q) |
+                Q(user__last_name__icontains=q) |
+                Q(specialization__icontains=q)
+            )
+
+        # Filter by department
+        department = request.GET.get('department', '')
+        if department:
+            doctors = doctors.filter(department__name=department)
+
+        serializer = DoctorSerializer(doctors, many=True)
+        return Response(serializer.data)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def doctor_ratings(request, doctor_id):
+    try:
+        doctor = get_object_or_404(Doctor, id=doctor_id)
+        ratings = doctor.ratings.all()
+        serializer = DoctorRatingSerializer(ratings, many=True)
+        return Response(serializer.data)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
 

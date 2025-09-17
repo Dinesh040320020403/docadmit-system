@@ -19,6 +19,10 @@ urlpatterns = [
     # Bills
     path('api/bills/', views.create_bill, name='create_bill'),
     
+    # Doctors
+    path('api/doctors/', views.list_doctors, name='list_doctors'),
+    path('api/doctors/<int:doctor_id>/ratings/', views.doctor_ratings, name='doctor_ratings'),
+
     # Dashboards
     path('api/dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),
     path('api/dashboard/doctor/', views.doctor_dashboard, name='doctor_dashboard'),
