@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AdminGuard from "./components/AdminGuard";
+import HospitalChatbot from "./components/HospitalChatbot";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import BookAppointment from "./pages/BookAppointment";
@@ -30,6 +31,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Navbar />
+        <HospitalChatbot />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />

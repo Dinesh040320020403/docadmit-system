@@ -22,7 +22,7 @@ import {
   AlertCircle,
   CheckCircle,
   User,
-  BirthdayCake,
+  Cake,
   Shield
 } from "lucide-react";
 
@@ -47,6 +47,7 @@ interface Patient {
   insuranceNumber: string;
   primaryDoctor: string;
   conditions: string[];
+  address: string;
 }
 
 const PatientsList = () => {
@@ -62,6 +63,7 @@ const PatientsList = () => {
       bloodType: "O+",
       image: "/api/placeholder/150/150",
       location: "New York, NY",
+      address: "123 Main St, New York, NY 10001",
       phone: "+1 (555) 123-4567",
       email: "john.smith@email.com",
       emergencyContact: "+1 (555) 987-6543 (Jane Smith)",
@@ -84,6 +86,7 @@ const PatientsList = () => {
       bloodType: "A-",
       image: "/api/placeholder/150/150",
       location: "Los Angeles, CA",
+      address: "456 Oak Ave, Los Angeles, CA 90210",
       phone: "+1 (555) 234-5678",
       email: "emily.davis@email.com",
       emergencyContact: "+1 (555) 876-5432 (Mike Davis)",
@@ -106,6 +109,7 @@ const PatientsList = () => {
       bloodType: "B+",
       image: "/api/placeholder/150/150",
       location: "Chicago, IL",
+      address: "789 Pine St, Chicago, IL 60601",
       phone: "+1 (555) 345-6789",
       email: "robert.johnson@email.com",
       emergencyContact: "+1 (555) 765-4321 (Mary Johnson)",
@@ -128,6 +132,7 @@ const PatientsList = () => {
       bloodType: "AB+",
       image: "/api/placeholder/150/150",
       location: "Miami, FL",
+      address: "321 Beach Blvd, Miami, FL 33101",
       phone: "+1 (555) 456-7890",
       email: "sarah.wilson@email.com",
       emergencyContact: "+1 (555) 654-3210 (Tom Wilson)",
@@ -150,6 +155,7 @@ const PatientsList = () => {
       bloodType: "O-",
       image: "/api/placeholder/150/150",
       location: "Seattle, WA",
+      address: "654 Cedar Way, Seattle, WA 98101",
       phone: "+1 (555) 567-8901",
       email: "michael.brown@email.com",
       emergencyContact: "+1 (555) 543-2109 (Lisa Brown)",
@@ -172,6 +178,7 @@ const PatientsList = () => {
       bloodType: "A+",
       image: "/api/placeholder/150/150",
       location: "Boston, MA",
+      address: "987 Elm St, Boston, MA 02101",
       phone: "+1 (555) 678-9012",
       email: "jennifer.taylor@email.com",
       emergencyContact: "+1 (555) 432-1098 (David Taylor)",
